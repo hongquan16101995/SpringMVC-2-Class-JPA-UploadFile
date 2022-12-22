@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <style>
+        h1 {
+            margin: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 600px;
+            text-align: center;
+        }
+
+        td {
+            width: 25%;
+        }
+
+        form {
+            float: right;
+            vertical-align: center;
+        }
+
+        input {
+            border-radius: 4px;
+            height: 38px;
+        }
+
+        a {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>List Category</h1>
+    <a class="btn btn-primary" th:href="@{/categories/create}">Create new</a>
+    <a class="btn btn-primary" th:href="@{/products}">List Product</a>
+    <form th:action="@{/categories}" method="get">
+        <label>
+            <input type="text" name="search" th:value="${search}">
+        </label>
+        <button class="btn btn-primary">Search</button>
+    </form>
+    <table class="table table-striped">
+        <tr>
+            <th>STT</th>
+            <th>Name</th>
+            <th colspan="2" style="text-align: center ">Action</th>
+        </tr>
+        <tr th:each="c,s : ${categories}">
+            <td th:text="${s.count}"></td>
+            <td th:text="${c.name}"></td>
+            <td><a class="btn btn-warning" th:href="@{/categories/update/{id}(id=${c.getId()})}">Update</a></td>
+            <td><a class="btn btn-danger" th:href="@{/categories/delete/{id}(id=${c.getId()})}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Delete</a></td>
+        </tr>
+    </table>
+    <div>
+        <a th:href="@{/categories(page=${categories.number - 1},search=${search})}" th:if="${categories.hasPrevious()}">Previous</a>
+        <span th:text="${categories.number + 1}"></span>/<span th:text="${categories.totalPages}"></span>
+        <a th:href="@{/categories(page=${categories.number + 1},search=${search})}"
+           th:if="${categories.hasNext()}">Next</a>
+    </div>
+</div>
+</body>
+</html>
