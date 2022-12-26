@@ -3,6 +3,9 @@ package com.cg.product.model;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Entity
@@ -11,9 +14,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Pattern(regexp = "[a-zA-Z]+")
     private String name;
     private Double price;
+
+    @Min(10)
+    @Max(100)
     private Integer quantity;
+
     private String image;
     private LocalDate dateCreated;
 
@@ -22,6 +30,22 @@ public class Product {
 
     @Transient
     private MultipartFile img;
+
+    public Product() {
+    }
+
+    public Product(Long id, String name, Double price,
+                  Integer quantity, String image,
+                   LocalDate dateCreated, Category category, MultipartFile img) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.image = image;
+        this.dateCreated = dateCreated;
+        this.category = category;
+        this.img = img;
+    }
 
     public Long getId() {
         return id;

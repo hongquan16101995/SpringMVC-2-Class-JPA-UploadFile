@@ -37,6 +37,23 @@ dependencies {
 
     //upload file
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
+    //validation
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.10.Final'
+
+    //AOP
+    implementation group: 'org.springframework', name: 'spring-aspects', version: '5.3.20'
+
+    //RESTful
+    implementation group: 'org.springframework', name: 'spring-tx', version: '5.3.20'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
+
+
 }
 
 test {

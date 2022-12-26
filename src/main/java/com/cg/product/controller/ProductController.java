@@ -10,10 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
@@ -68,17 +71,27 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Product product) {
-        MultipartFile image = product.getImg();
-        String name = image.getOriginalFilename();
-        try {
-            FileCopyUtils.copy(image.getBytes(), new File(upload + name));
-        } catch (Exception e) {
-            e.printStackTrace();
+    public ModelAndView save(@Valid @ModelAttribute Product product,
+                             BindingResult bindingResult,
+                             @PageableDefault(size = 3) Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("product/form");
+            modelAndView.addObject("product", product);
+            return modelAndView;
+        } else {
+            MultipartFile image = product.getImg();
+            String name = image.getOriginalFilename();
+            try {
+                FileCopyUtils.copy(image.getBytes(), new File(upload + name));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            product.setImage(name);
+            iCrudService.save(product);
+            ModelAndView modelAndView = new ModelAndView("product/list");
+            modelAndView.addObject("products", iCrudService.findAll(pageable));
+            return modelAndView;
         }
-        product.setImage(name);
-        iCrudService.save(product);
-        return "redirect:/products";
     }
 
     @GetMapping("/delete/{id}")
